@@ -1,0 +1,1437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Productivity Hub - All-in-One Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            transition: all 0.3s ease;
+            min-height: 100vh;
+        }
+
+        .light-theme {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0e7ff 100%);
+            color: #1f2937;
+        }
+
+        .dark-theme {
+            background: #111827;
+            color: #f9fafb;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: #3b82f6;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .title {
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        .theme-toggle {
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .light-theme .theme-toggle {
+            background: white;
+            color: #374151;
+        }
+
+        .light-theme .theme-toggle:hover {
+            background: #f9fafb;
+        }
+
+        .dark-theme .theme-toggle {
+            background: #374151;
+            color: #fbbf24;
+        }
+
+        .dark-theme .theme-toggle:hover {
+            background: #4b5563;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+        }
+
+        .card {
+            padding: 24px;
+            border-radius: 16px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .light-theme .card {
+            background: white;
+        }
+
+        .dark-theme .card {
+            background: #1f2937;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .icon {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Clock Styles */
+        .digital-clock {
+            text-align: center;
+        }
+
+        .time-display {
+            font-family: 'Courier New', monospace;
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .date-display {
+            font-size: 14px;
+            opacity: 0.7;
+        }
+
+        .analog-clock {
+            display: flex;
+            justify-content: center;
+        }
+
+        /* Calculator Styles */
+        .calculator {
+            max-width: 280px;
+            margin: 0 auto;
+        }
+
+        .calc-display {
+            width: 100%;
+            padding: 16px;
+            font-family: 'Courier New', monospace;
+            font-size: 24px;
+            text-align: right;
+            border: none;
+            border-radius: 8px;
+            margin-bottom: 16px;
+        }
+
+        .light-theme .calc-display {
+            background: #f3f4f6;
+            color: #1f2937;
+        }
+
+        .dark-theme .calc-display {
+            background: #374151;
+            color: #f9fafb;
+        }
+
+        .calc-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+        }
+
+        .calc-btn {
+            padding: 16px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .calc-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .light-theme .calc-btn {
+            background: #e5e7eb;
+            color: #1f2937;
+        }
+
+        .light-theme .calc-btn:hover {
+            background: #d1d5db;
+        }
+
+        .dark-theme .calc-btn {
+            background: #374151;
+            color: #f9fafb;
+        }
+
+        .dark-theme .calc-btn:hover {
+            background: #4b5563;
+        }
+
+        .calc-btn.operator {
+            background: #f97316 !important;
+            color: white !important;
+        }
+
+        .calc-btn.operator:hover {
+            background: #ea580c !important;
+        }
+
+        .calc-btn.clear {
+            grid-column: span 2;
+        }
+
+        .calc-btn.zero {
+            grid-column: span 2;
+        }
+
+        .calc-btn.equals {
+            grid-row: span 2;
+        }
+
+        /* Todo Styles */
+        .todo-input-container {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .todo-input {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .light-theme .todo-input {
+            background: white;
+            border-color: #d1d5db;
+            color: #1f2937;
+        }
+
+        .dark-theme .todo-input {
+            background: #374151;
+            border-color: #4b5563;
+            color: #f9fafb;
+        }
+
+        .todo-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .btn {
+            padding: 12px 16px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #2563eb;
+        }
+
+        .todo-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .todo-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .light-theme .todo-item {
+            background: #f9fafb;
+        }
+
+        .dark-theme .todo-item {
+            background: #374151;
+        }
+
+        .todo-checkbox {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #d1d5db;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .todo-checkbox.checked {
+            background: #10b981;
+            border-color: #10b981;
+            color: white;
+        }
+
+        .todo-text {
+            flex: 1;
+            font-size: 14px;
+        }
+
+        .todo-text.completed {
+            text-decoration: line-through;
+            opacity: 0.6;
+        }
+
+        .todo-delete {
+            padding: 4px;
+            background: none;
+            border: none;
+            color: #ef4444;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+
+        .todo-delete:hover {
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        /* Timer Styles */
+        .timer-container {
+            text-align: center;
+        }
+
+        .timer-circle {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 24px;
+        }
+
+        .timer-display {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+
+        .timer-time {
+            font-family: 'Courier New', monospace;
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+
+        .timer-label {
+            font-size: 12px;
+            opacity: 0.7;
+        }
+
+        .timer-controls {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .btn-success {
+            background: #10b981;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #059669;
+        }
+
+        .btn-danger {
+            background: #ef4444;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+
+        .btn-secondary {
+            color: white;
+        }
+
+        .light-theme .btn-secondary {
+            background: #6b7280;
+        }
+
+        .light-theme .btn-secondary:hover {
+            background: #4b5563;
+        }
+
+        .dark-theme .btn-secondary {
+            background: #374151;
+        }
+
+        .dark-theme .btn-secondary:hover {
+            background: #4b5563;
+        }
+
+        /* Notes Styles */
+        .notes-container {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .note-form {
+            margin-bottom: 16px;
+            padding: 16px;
+            border: 2px dashed;
+            border-radius: 8px;
+        }
+
+        .light-theme .note-form {
+            border-color: #d1d5db;
+            background: #f9fafb;
+        }
+
+        .dark-theme .note-form {
+            border-color: #4b5563;
+            background: #374151;
+        }
+
+        .note-input {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid;
+            border-radius: 6px;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .light-theme .note-input {
+            background: white;
+            border-color: #d1d5db;
+            color: #1f2937;
+        }
+
+        .dark-theme .note-input {
+            background: #4b5563;
+            border-color: #6b7280;
+            color: #f9fafb;
+        }
+
+        .note-textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .note-item {
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .light-theme .note-item {
+            background: #f3f4f6;
+        }
+
+        .dark-theme .note-item {
+            background: #374151;
+        }
+
+        .note-header {
+            display: flex;
+            justify-content: between;
+            align-items: flex-start;
+            margin-bottom: 8px;
+        }
+
+        .note-title {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .note-content {
+            font-size: 14px;
+            margin-bottom: 8px;
+            opacity: 0.8;
+        }
+
+        .note-date {
+            font-size: 12px;
+            opacity: 0.6;
+        }
+
+        .note-actions {
+            display: flex;
+            gap: 4px;
+            margin-left: auto;
+        }
+
+        .note-btn {
+            padding: 4px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+
+        .note-btn.edit {
+            color: #3b82f6;
+        }
+
+        .note-btn.edit:hover {
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .note-btn.delete {
+            color: #ef4444;
+        }
+
+        .note-btn.delete:hover {
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        /* Quote Styles */
+        .quote-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .quote-container {
+            padding: 16px;
+            border-left: 4px solid #fbbf24;
+            border-radius: 8px;
+        }
+
+        .light-theme .quote-container {
+            background: #fefce8;
+        }
+
+        .dark-theme .quote-container {
+            background: #1f2937;
+        }
+
+        .quote-text {
+            font-style: italic;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .quote-author {
+            font-size: 12px;
+            font-weight: 600;
+            color: #f59e0b;
+        }
+
+        .refresh-btn {
+            padding: 8px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .light-theme .refresh-btn {
+            color: #6b7280;
+        }
+
+        .light-theme .refresh-btn:hover {
+            background: #f3f4f6;
+        }
+
+        .dark-theme .refresh-btn {
+            color: #9ca3af;
+        }
+
+        .dark-theme .refresh-btn:hover {
+            background: #374151;
+        }
+
+        .loading {
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 16px;
+            }
+            
+            .grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header {
+                flex-direction: column;
+                gap: 16px;
+                text-align: center;
+            }
+        }
+
+        /* Utility Classes */
+        .hidden {
+            display: none;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .mb-4 {
+            margin-bottom: 16px;
+        }
+
+        .opacity-60 {
+            opacity: 0.6;
+        }
+    </style>
+</head>
+<body class="light-theme">
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <div class="logo-icon">⏰</div>
+                <h1 class="title">Productivity Hub</h1>
+            </div>
+            <button class="theme-toggle" onclick="toggleTheme()">
+                <span id="theme-icon">🌙</span>
+            </button>
+        </header>
+
+        <!-- Main Grid -->
+        <div class="grid">
+            <!-- Digital Clock -->
+            <div class="card">
+                <div class="card-header">
+                    <span class="icon">🕐</span>
+                    <h2 class="card-title">Digital Clock</h2>
+                </div>
+                <div class="digital-clock">
+                    <div class="time-display" id="digital-time">12:00:00 PM</div>
+                    <div class="date-display" id="digital-date">Monday, January 1, 2024</div>
+                </div>
+            </div>
+
+            <!-- Analog Clock -->
+            <div class="card">
+                <div class="card-header">
+                    <span class="icon">🕐</span>
+                    <h2 class="card-title">Analog Clock</h2>
+                </div>
+                <div class="analog-clock">
+                    <svg width="200" height="200" id="analog-clock-svg">
+                        <circle cx="100" cy="100" r="95" fill="none" stroke="#e5e7eb" stroke-width="2"/>
+                        <!-- Hour markers will be added by JavaScript -->
+                        <!-- Clock hands will be added by JavaScript -->
+                        <circle cx="100" cy="100" r="4" fill="#ef4444"/>
+                    </svg>
+                </div>
+            </div>
+
+            <!-- Calculator -->
+            <div class="card">
+                <div class="card-header">
+                    <span class="icon">🧮</span>
+                    <h2 class="card-title">Calculator</h2>
+                </div>
+                <div class="calculator">
+                    <input type="text" class="calc-display" id="calc-display" value="0" readonly>
+                    <div class="calc-grid">
+                        <button class="calc-btn clear" onclick="clearCalculator()">Clear</button>
+                        <button class="calc-btn operator" onclick="inputOperator('÷')">÷</button>
+                        <button class="calc-btn operator" onclick="inputOperator('×')">×</button>
+                        
+                        <button class="calc-btn" onclick="inputNumber('7')">7</button>
+                        <button class="calc-btn" onclick="inputNumber('8')">8</button>
+                        <button class="calc-btn" onclick="inputNumber('9')">9</button>
+                        <button class="calc-btn operator" onclick="inputOperator('-')">-</button>
+                        
+                        <button class="calc-btn" onclick="inputNumber('4')">4</button>
+                        <button class="calc-btn" onclick="inputNumber('5')">5</button>
+                        <button class="calc-btn" onclick="inputNumber('6')">6</button>
+                        <button class="calc-btn operator" onclick="inputOperator('+')">+</button>
+                        
+                        <button class="calc-btn" onclick="inputNumber('1')">1</button>
+                        <button class="calc-btn" onclick="inputNumber('2')">2</button>
+                        <button class="calc-btn" onclick="inputNumber('3')">3</button>
+                        <button class="calc-btn operator equals" onclick="calculateResult()">=</button>
+                        
+                        <button class="calc-btn zero" onclick="inputNumber('0')">0</button>
+                        <button class="calc-btn" onclick="inputDecimal()">.</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pomodoro Timer -->
+            <div class="card">
+                <div class="card-header">
+                    <span class="icon">⏲️</span>
+                    <h2 class="card-title">Pomodoro Timer</h2>
+                </div>
+                <div class="timer-container">
+                    <div class="timer-circle">
+                        <svg width="200" height="200">
+                            <circle cx="100" cy="100" r="90" fill="none" stroke="#e5e7eb" stroke-width="8"/>
+                            <circle id="timer-progress" cx="100" cy="100" r="90" fill="none" stroke="#f59e0b" 
+                                    stroke-width="8" stroke-linecap="round" 
+                                    stroke-dasharray="565.48" stroke-dashoffset="565.48"
+                                    transform="rotate(-90 100 100)"/>
+                        </svg>
+                        <div class="timer-display">
+                            <div class="timer-time" id="timer-time">25:00</div>
+                            <div class="timer-label" id="timer-label">Focus Time</div>
+                        </div>
+                    </div>
+                    <div class="timer-controls">
+                        <button class="btn btn-success" id="timer-start" onclick="toggleTimer()">
+                            <span>▶️</span> Start
+                        </button>
+                        <button class="btn btn-secondary" onclick="resetTimer()">
+                            <span>🔄</span>
+                        </button>
+                        <button class="btn btn-secondary" onclick="switchTimerMode()">
+                            <span>🕐</span>
+                        </button>
+                    </div>
+                    <div class="text-center">
+                        <small>Sessions completed: <span id="session-count">0</span></small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Todo List -->
+            <div class="card">
+                <div class="card-header">
+                    <span class="icon">✅</span>
+                    <h2 class="card-title">To-Do List</h2>
+                </div>
+                <div class="todo-input-container">
+                    <input type="text" class="todo-input" id="todo-input" placeholder="Add a new task..." 
+                           onkeypress="handleTodoKeyPress(event)">
+                    <button class="btn btn-primary" onclick="addTodo()">
+                        <span>➕</span> Add
+                    </button>
+                </div>
+                <div class="todo-list" id="todo-list">
+                    <div class="text-center opacity-60">
+                        <p>No tasks yet. Add one above!</p>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <small id="todo-stats">0 of 0 tasks remaining</small>
+                </div>
+            </div>
+
+            <!-- Notes -->
+            <div class="card">
+                <div class="card-header">
+                    <span class="icon">📝</span>
+                    <h2 class="card-title">Quick Notes</h2>
+                </div>
+                <div id="note-form" class="note-form hidden">
+                    <input type="text" class="note-input" id="note-title" placeholder="Note title...">
+                    <textarea class="note-input note-textarea" id="note-content" placeholder="Write your note here..."></textarea>
+                    <div style="display: flex; gap: 8px;">
+                        <button class="btn btn-success" onclick="saveNote()">
+                            <span>💾</span> Save
+                        </button>
+                        <button class="btn btn-secondary" onclick="cancelNote()">
+                            <span>❌</span> Cancel
+                        </button>
+                    </div>
+                </div>
+                <button class="btn btn-primary mb-4" id="new-note-btn" onclick="showNoteForm()">
+                    <span>➕</span> New Note
+                </button>
+                <div class="notes-container" id="notes-list">
+                    <div class="text-center opacity-60">
+                        <p>No notes yet. Create your first note!</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Daily Quote -->
+            <div class="card" style="grid-column: span 2;">
+                <div class="quote-header">
+                    <div class="card-header" style="margin-bottom: 0;">
+                        <span class="icon">💭</span>
+                        <h2 class="card-title">Daily Inspiration</h2>
+                    </div>
+                    <button class="refresh-btn" onclick="refreshQuote()" id="refresh-quote">
+                        <span>🔄</span>
+                    </button>
+                </div>
+                <div class="quote-container">
+                    <p class="quote-text" id="quote-text">"The way to get started is to quit talking and begin doing."</p>
+                    <p class="quote-author" id="quote-author">— Walt Disney</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let isDarkTheme = false;
+        let todos = JSON.parse(localStorage.getItem('todos') || '[]');
+        let notes = JSON.parse(localStorage.getItem('notes') || '[]');
+        let timerInterval = null;
+        let timerSeconds = 25 * 60; // 25 minutes
+        let isTimerRunning = false;
+        let isBreakTime = false;
+        let sessionCount = parseInt(localStorage.getItem('sessionCount') || '0');
+        
+        // Calculator variables
+        let calcDisplay = '0';
+        let calcPrevious = null;
+        let calcOperation = null;
+        let calcWaitingForOperand = false;
+
+        // Quotes array
+        const quotes = [
+            { text: "The way to get started is to quit talking and begin doing.", author: "Walt Disney" },
+            { text: "Life is what happens to you while you're busy making other plans.", author: "John Lennon" },
+            { text: "The future belongs to those who believe in the beauty of their dreams.", author: "Eleanor Roosevelt" },
+            { text: "It is during our darkest moments that we must focus to see the light.", author: "Aristotle" },
+            { text: "The only impossible journey is the one you never begin.", author: "Tony Robbins" },
+            { text: "Success is not final, failure is not fatal: it is the courage to continue that counts.", author: "Winston Churchill" },
+            { text: "The only way to do great work is to love what you do.", author: "Steve Jobs" },
+            { text: "Life is really simple, but we insist on making it complicated.", author: "Confucius" },
+            { text: "The purpose of our lives is to be happy.", author: "Dalai Lama" },
+            { text: "The greatest glory in living lies not in never falling, but in rising every time we fall.", author: "Nelson Mandela" }
+        ];
+
+        // Initialize app
+        document.addEventListener('DOMContentLoaded', function() {
+            loadTheme();
+            updateClocks();
+            setInterval(updateClocks, 1000);
+            renderTodos();
+            renderNotes();
+            loadQuote();
+            updateSessionCount();
+            
+            // Load timer state
+            const savedTimer = localStorage.getItem('timerState');
+            if (savedTimer) {
+                const state = JSON.parse(savedTimer);
+                timerSeconds = state.seconds;
+                isBreakTime = state.isBreak;
+                updateTimerDisplay();
+            }
+        });
+
+        // Theme functions
+        function toggleTheme() {
+            isDarkTheme = !isDarkTheme;
+            document.body.className = isDarkTheme ? 'dark-theme' : 'light-theme';
+            document.getElementById('theme-icon').textContent = isDarkTheme ? '☀️' : '🌙';
+            localStorage.setItem('theme', isDarkTheme ? 'dark' : 'light');
+            updateAnalogClock();
+        }
+
+        function loadTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                isDarkTheme = true;
+                document.body.className = 'dark-theme';
+                document.getElementById('theme-icon').textContent = '☀️';
+            }
+        }
+
+        // Clock functions
+        function updateClocks() {
+            const now = new Date();
+            
+            // Digital clock
+            const timeString = now.toLocaleTimeString('en-US', {
+                hour12: true,
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            });
+            const dateString = now.toLocaleDateString('en-US', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+            
+            document.getElementById('digital-time').textContent = timeString;
+            document.getElementById('digital-date').textContent = dateString;
+            
+            // Analog clock
+            updateAnalogClock();
+        }
+
+        function updateAnalogClock() {
+            const now = new Date();
+            const seconds = now.getSeconds();
+            const minutes = now.getMinutes();
+            const hours = now.getHours() % 12;
+            
+            const secondAngle = (seconds * 6) - 90;
+            const minuteAngle = (minutes * 6) - 90;
+            const hourAngle = (hours * 30 + minutes * 0.5) - 90;
+            
+            const svg = document.getElementById('analog-clock-svg');
+            const strokeColor = isDarkTheme ? '#374151' : '#e5e7eb';
+            const markerColor = isDarkTheme ? '#9ca3af' : '#6b7280';
+            
+            // Clear existing elements
+            svg.innerHTML = `
+                <circle cx="100" cy="100" r="95" fill="none" stroke="${strokeColor}" stroke-width="2"/>
+            `;
+            
+            // Add hour markers
+            for (let i = 0; i < 12; i++) {
+                const angle = (i * 30) - 90;
+                const x1 = 100 + 85 * Math.cos(angle * Math.PI / 180);
+                const y1 = 100 + 85 * Math.sin(angle * Math.PI / 180);
+                const x2 = 100 + 75 * Math.cos(angle * Math.PI / 180);
+                const y2 = 100 + 75 * Math.sin(angle * Math.PI / 180);
+                
+                const marker = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                marker.setAttribute('x1', x1);
+                marker.setAttribute('y1', y1);
+                marker.setAttribute('x2', x2);
+                marker.setAttribute('y2', y2);
+                marker.setAttribute('stroke', markerColor);
+                marker.setAttribute('stroke-width', '2');
+                svg.appendChild(marker);
+            }
+            
+            // Add hands
+            const hourHand = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            hourHand.setAttribute('x1', '100');
+            hourHand.setAttribute('y1', '100');
+            hourHand.setAttribute('x2', 100 + 50 * Math.cos(hourAngle * Math.PI / 180));
+            hourHand.setAttribute('y2', 100 + 50 * Math.sin(hourAngle * Math.PI / 180));
+            hourHand.setAttribute('stroke', '#f59e0b');
+            hourHand.setAttribute('stroke-width', '4');
+            hourHand.setAttribute('stroke-linecap', 'round');
+            svg.appendChild(hourHand);
+            
+            const minuteHand = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            minuteHand.setAttribute('x1', '100');
+            minuteHand.setAttribute('y1', '100');
+            minuteHand.setAttribute('x2', 100 + 70 * Math.cos(minuteAngle * Math.PI / 180));
+            minuteHand.setAttribute('y2', 100 + 70 * Math.sin(minuteAngle * Math.PI / 180));
+            minuteHand.setAttribute('stroke', '#3b82f6');
+            minuteHand.setAttribute('stroke-width', '3');
+            minuteHand.setAttribute('stroke-linecap', 'round');
+            svg.appendChild(minuteHand);
+            
+            const secondHand = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            secondHand.setAttribute('x1', '100');
+            secondHand.setAttribute('y1', '100');
+            secondHand.setAttribute('x2', 100 + 80 * Math.cos(secondAngle * Math.PI / 180));
+            secondHand.setAttribute('y2', 100 + 80 * Math.sin(secondAngle * Math.PI / 180));
+            secondHand.setAttribute('stroke', '#ef4444');
+            secondHand.setAttribute('stroke-width', '1');
+            secondHand.setAttribute('stroke-linecap', 'round');
+            svg.appendChild(secondHand);
+            
+            // Center dot
+            const centerDot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            centerDot.setAttribute('cx', '100');
+            centerDot.setAttribute('cy', '100');
+            centerDot.setAttribute('r', '4');
+            centerDot.setAttribute('fill', '#ef4444');
+            svg.appendChild(centerDot);
+        }
+
+        // Calculator functions
+        function inputNumber(num) {
+            if (calcWaitingForOperand) {
+                calcDisplay = num;
+                calcWaitingForOperand = false;
+            } else {
+                calcDisplay = calcDisplay === '0' ? num : calcDisplay + num;
+            }
+            updateCalcDisplay();
+        }
+
+        function inputDecimal() {
+            if (calcWaitingForOperand) {
+                calcDisplay = '0.';
+                calcWaitingForOperand = false;
+            } else if (calcDisplay.indexOf('.') === -1) {
+                calcDisplay += '.';
+            }
+            updateCalcDisplay();
+        }
+
+        function inputOperator(nextOperator) {
+            const inputValue = parseFloat(calcDisplay);
+
+            if (calcPrevious === null) {
+                calcPrevious = inputValue;
+            } else if (calcOperation) {
+                const currentValue = calcPrevious || 0;
+                const newValue = performCalculation(currentValue, inputValue, calcOperation);
+
+                calcDisplay = String(newValue);
+                calcPrevious = newValue;
+            }
+
+            calcWaitingForOperand = true;
+            calcOperation = nextOperator;
+            updateCalcDisplay();
+        }
+
+        function calculateResult() {
+            if (calcOperation && calcPrevious !== null) {
+                const inputValue = parseFloat(calcDisplay);
+                const newValue = performCalculation(calcPrevious, inputValue, calcOperation);
+                
+                calcDisplay = String(newValue);
+                calcPrevious = null;
+                calcOperation = null;
+                calcWaitingForOperand = true;
+                updateCalcDisplay();
+            }
+        }
+
+        function performCalculation(firstOperand, secondOperand, operation) {
+            switch (operation) {
+                case '+':
+                    return firstOperand + secondOperand;
+                case '-':
+                    return firstOperand - secondOperand;
+                case '×':
+                    return firstOperand * secondOperand;
+                case '÷':
+                    return firstOperand / secondOperand;
+                default:
+                    return secondOperand;
+            }
+        }
+
+        function clearCalculator() {
+            calcDisplay = '0';
+            calcPrevious = null;
+            calcOperation = null;
+            calcWaitingForOperand = false;
+            updateCalcDisplay();
+        }
+
+        function updateCalcDisplay() {
+            document.getElementById('calc-display').value = calcDisplay;
+        }
+
+        // Todo functions
+        function addTodo() {
+            const input = document.getElementById('todo-input');
+            const text = input.value.trim();
+            
+            if (text) {
+                const todo = {
+                    id: Date.now(),
+                    text: text,
+                    completed: false,
+                    createdAt: new Date().toISOString()
+                };
+                
+                todos.push(todo);
+                saveTodos();
+                renderTodos();
+                input.value = '';
+            }
+        }
+
+        function toggleTodo(id) {
+            todos = todos.map(todo =>
+                todo.id === id ? { ...todo, completed: !todo.completed } : todo
+            );
+            saveTodos();
+            renderTodos();
+        }
+
+        function deleteTodo(id) {
+            todos = todos.filter(todo => todo.id !== id);
+            saveTodos();
+            renderTodos();
+        }
+
+        function handleTodoKeyPress(event) {
+            if (event.key === 'Enter') {
+                addTodo();
+            }
+        }
+
+        function saveTodos() {
+            localStorage.setItem('todos', JSON.stringify(todos));
+        }
+
+        function renderTodos() {
+            const todoList = document.getElementById('todo-list');
+            const todoStats = document.getElementById('todo-stats');
+            
+            if (todos.length === 0) {
+                todoList.innerHTML = '<div class="text-center opacity-60"><p>No tasks yet. Add one above!</p></div>';
+                todoStats.textContent = '0 of 0 tasks remaining';
+                return;
+            }
+            
+            const completedCount = todos.filter(todo => todo.completed).length;
+            const totalCount = todos.length;
+            const remainingCount = totalCount - completedCount;
+            
+            todoList.innerHTML = todos.map(todo => `
+                <div class="todo-item ${todo.completed ? 'opacity-60' : ''}">
+                    <div class="todo-checkbox ${todo.completed ? 'checked' : ''}" onclick="toggleTodo(${todo.id})">
+                        ${todo.completed ? '✓' : ''}
+                    </div>
+                    <span class="todo-text ${todo.completed ? 'completed' : ''}">${todo.text}</span>
+                    <button class="todo-delete" onclick="deleteTodo(${todo.id})">🗑️</button>
+                </div>
+            `).join('');
+            
+            todoStats.textContent = `${remainingCount} of ${totalCount} tasks remaining`;
+        }
+
+        // Timer functions
+        function toggleTimer() {
+            if (isTimerRunning) {
+                pauseTimer();
+            } else {
+                startTimer();
+            }
+        }
+
+        function startTimer() {
+            isTimerRunning = true;
+            document.getElementById('timer-start').innerHTML = '<span>⏸️</span> Pause';
+            document.getElementById('timer-start').className = 'btn btn-danger';
+            
+            timerInterval = setInterval(() => {
+                timerSeconds--;
+                updateTimerDisplay();
+                saveTimerState();
+                
+                if (timerSeconds <= 0) {
+                    timerComplete();
+                }
+            }, 1000);
+        }
+
+        function pauseTimer() {
+            isTimerRunning = false;
+            clearInterval(timerInterval);
+            document.getElementById('timer-start').innerHTML = '<span>▶️</span> Start';
+            document.getElementById('timer-start').className = 'btn btn-success';
+        }
+
+        function resetTimer() {
+            pauseTimer();
+            timerSeconds = isBreakTime ? 5 * 60 : 25 * 60;
+            updateTimerDisplay();
+            saveTimerState();
+        }
+
+        function switchTimerMode() {
+            pauseTimer();
+            isBreakTime = !isBreakTime;
+            timerSeconds = isBreakTime ? 5 * 60 : 25 * 60;
+            updateTimerDisplay();
+            saveTimerState();
+        }
+
+        function timerComplete() {
+            pauseTimer();
+            playNotificationSound();
+            
+            if (isBreakTime) {
+                // Break finished, start work session
+                isBreakTime = false;
+                timerSeconds = 25 * 60;
+                sessionCount++;
+                updateSessionCount();
+            } else {
+                // Work session finished, start break
+                isBreakTime = true;
+                timerSeconds = 5 * 60;
+            }
+            
+            updateTimerDisplay();
+            saveTimerState();
+        }
+
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timerSeconds / 60);
+            const seconds = timerSeconds % 60;
+            const timeString = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            
+            document.getElementById('timer-time').textContent = timeString;
+            document.getElementById('timer-label').textContent = isBreakTime ? 'Break Time' : 'Focus Time';
+            
+            // Update progress circle
+            const totalSeconds = isBreakTime ? 5 * 60 : 25 * 60;
+            const progress = ((totalSeconds - timerSeconds) / totalSeconds) * 100;
+            const circumference = 2 * Math.PI * 90;
+            const offset = circumference - (progress / 100) * circumference;
+            
+            const progressCircle = document.getElementById('timer-progress');
+            progressCircle.style.strokeDashoffset = offset;
+            progressCircle.setAttribute('stroke', isBreakTime ? '#10b981' : '#f59e0b');
+        }
+
+        function updateSessionCount() {
+            document.getElementById('session-count').textContent = sessionCount;
+            localStorage.setItem('sessionCount', sessionCount.toString());
+        }
+
+        function saveTimerState() {
+            const state = {
+                seconds: timerSeconds,
+                isBreak: isBreakTime
+            };
+            localStorage.setItem('timerState', JSON.stringify(state));
+        }
+
+        function playNotificationSound() {
+            // Create a simple beep sound
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+
+            oscillator.frequency.value = 800;
+            oscillator.type = 'sine';
+
+            gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 1);
+
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 1);
+        }
+
+        // Notes functions
+        let editingNoteId = null;
+
+        function showNoteForm() {
+            document.getElementById('note-form').classList.remove('hidden');
+            document.getElementById('new-note-btn').classList.add('hidden');
+            document.getElementById('note-title').focus();
+        }
+
+        function cancelNote() {
+            document.getElementById('note-form').classList.add('hidden');
+            document.getElementById('new-note-btn').classList.remove('hidden');
+            document.getElementById('note-title').value = '';
+            document.getElementById('note-content').value = '';
+            editingNoteId = null;
+        }
+
+        function saveNote() {
+            const title = document.getElementById('note-title').value.trim();
+            const content = document.getElementById('note-content').value.trim();
+            
+            if (title || content) {
+                if (editingNoteId) {
+                    // Update existing note
+                    notes = notes.map(note =>
+                        note.id === editingNoteId
+                            ? { ...note, title: title || 'Untitled Note', content, updatedAt: new Date().toISOString() }
+                            : note
+                    );
+                } else {
+                    // Create new note
+                    const note = {
+                        id: Date.now(),
+                        title: title || 'Untitled Note',
+                        content,
+                        createdAt: new Date().toISOString(),
+                        updatedAt: new Date().toISOString()
+                    };
+                    notes.unshift(note);
+                }
+                
+                saveNotes();
+                renderNotes();
+                cancelNote();
+            }
+        }
+
+        function editNote(id) {
+            const note = notes.find(n => n.id === id);
+            if (note) {
+                editingNoteId = id;
+                document.getElementById('note-title').value = note.title;
+                document.getElementById('note-content').value = note.content;
+                showNoteForm();
+            }
+        }
+
+        function deleteNote(id) {
+            if (confirm('Are you sure you want to delete this note?')) {
+                notes = notes.filter(note => note.id !== id);
+                saveNotes();
+                renderNotes();
+            }
+        }
+
+        function saveNotes() {
+            localStorage.setItem('notes', JSON.stringify(notes));
+        }
+
+        function renderNotes() {
+            const notesList = document.getElementById('notes-list');
+            
+            if (notes.length === 0) {
+                notesList.innerHTML = '<div class="text-center opacity-60"><p>No notes yet. Create your first note!</p></div>';
+                return;
+            }
+            
+            notesList.innerHTML = notes.map(note => `
+                <div class="note-item">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                        <div style="flex: 1;">
+                            <div class="note-title">${note.title}</div>
+                            <div class="note-content">${note.content || 'No content'}</div>
+                            <div class="note-date">Updated ${new Date(note.updatedAt).toLocaleDateString()}</div>
+                        </div>
+                        <div class="note-actions">
+                            <button class="note-btn edit" onclick="editNote(${note.id})">✏️</button>
+                            <button class="note-btn delete" onclick="deleteNote(${note.id})">🗑️</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Quote functions
+        function loadQuote() {
+            const savedQuote = localStorage.getItem('dailyQuote');
+            const savedDate = localStorage.getItem('quoteDate');
+            const today = new Date().toDateString();
+            
+            if (savedQuote && savedDate === today) {
+                const quote = JSON.parse(savedQuote);
+                displayQuote(quote);
+            } else {
+                refreshQuote();
+            }
+        }
+
+        function refreshQuote() {
+            const refreshBtn = document.getElementById('refresh-quote');
+            refreshBtn.classList.add('loading');
+            
+            setTimeout(() => {
+                const randomIndex = Math.floor(Math.random() * quotes.length);
+                const quote = quotes[randomIndex];
+                
+                displayQuote(quote);
+                
+                // Save quote and date
+                localStorage.setItem('dailyQuote', JSON.stringify(quote));
+                localStorage.setItem('quoteDate', new Date().toDateString());
+                
+                refreshBtn.classList.remove('loading');
+            }, 500);
+        }
+
+        function displayQuote(quote) {
+            document.getElementById('quote-text').textContent = `"${quote.text}"`;
+            document.getElementById('quote-author').textContent = `— ${quote.author}`;
+        }
+           // Link Summarizer function
+   async function summarize() {
+       const url = document.getElementById("urlInput").value;
+       const summaryBox = document.getElementById("summaryResult");
+
+       if (!url) {
+           summaryBox.innerText = "⚠️ Please enter a valid link.";
+           return;
+       }
+
+       summaryBox.innerText = "⏳ Summarizing...";
+
+       try {
+           const response = await fetch("http://127.0.0.1:5000/summarize", {
+               method: "POST",
+               headers: { "Content-Type": "application/json" },
+               body: JSON.stringify({ url: url })
+           });
+
+           const data = await response.json();
+           summaryBox.innerText = data.summary || "⚠️ Could not generate summary.";
+       } catch (err) {
+           summaryBox.innerText = "❌ Error connecting to summarizer service.";
+       }
+   }
+</script>
+</body>
+</html>
+
+  
